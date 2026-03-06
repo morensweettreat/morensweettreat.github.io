@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#F47C20"/>
+  <title>Moren Sweet Treat</title>
+
+  <!-- Fonts loaded async — never blocks first paint -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'"/>
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800&display=swap"/>
+  </noscript>
+
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:      #F47C20;
+      --orange-dark: #C45E08;
+      --cream:       #FFF5EC;
+      --warm-white:  #FFFAF5;
+      --maroon:      #7A1B2A;
+      --gold:        #E8B84B;
+      --text:        #2D1A0E;
+      /* System stack renders instantly; web fonts swap in */
+      --font-body:    'Nunito', 'Segoe UI', Arial, sans-serif;
+      --font-display: 'Playfair Display', Georgia, serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--warm-white);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      background: rgba(255,245,236,0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--orange);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 5vw;
+      min-height: 62px;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 900; color: var(--maroon);
+      letter-spacing: 1px; white-space: nowrap;
+    }
+    .nav-logo span { color: var(--orange); }
+
+    /* Desktop links */
+    .nav-links { display: flex; gap: clamp(14px, 3vw, 28px); list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--maroon);
+      font-weight: 700; font-size: clamp(0.78rem, 1.8vw, 0.9rem);
+      position: relative; padding-bottom: 2px; transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px; background: var(--orange); transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; justify-content: space-between;
+      width: 26px; height: 20px; cursor: pointer;
+      background: none; border: none; padding: 0; flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block; height: 3px; border-radius: 2px;
+      background: var(--maroon); transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .mobile-menu {
+      display: none; position: fixed;
+      top: 62px; left: 0; right: 0;
+      background: var(--cream); z-index: 199;
+      padding: 20px 6vw 28px;
+      border-bottom: 2px solid var(--orange);
+      flex-direction: column; gap: 0;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none; color: var(--maroon);
+      font-weight: 800; font-size: 1.05rem;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(244,124,32,0.18);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      background: radial-gradient(ellipse at 70% 40%, #ffe0c0 0%, var(--cream) 55%, #fff 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: clamp(90px, 16vw, 140px) 6vw clamp(50px, 8vw, 80px);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: min(520px, 70vw); height: min(520px, 70vw); border-radius: 50%;
+      background: radial-gradient(circle, rgba(244,124,32,0.18) 0%, transparent 70%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -60px; left: -60px;
+      width: min(360px, 55vw); height: min(360px, 55vw); border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,184,75,0.15) 0%, transparent 70%);
+      animation: pulse 8s ease-in-out infinite reverse;
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+
+    .hero-content {
+      text-align: center; max-width: 680px; position: relative; z-index: 2;
+      animation: fadeUp 0.7s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(22px); }
+      to   { opacity:1; transform: none; }
+    }
+
+    .hero-badge {
+      display: inline-block; background: var(--maroon); color: #fff;
+      font-size: clamp(0.6rem, 1.8vw, 0.72rem);
+      font-weight: 800; letter-spacing: 3px;
+      padding: 5px 16px; border-radius: 30px; margin-bottom: 16px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 10vw, 6rem);
+      font-weight: 900; line-height: 1; color: var(--maroon);
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero h1 span { color: var(--orange); display: block; }
+    .hero-tagline {
+      font-size: clamp(0.88rem, 2.5vw, 1.1rem);
+      color: #7A5030; font-style: italic;
+      margin: 16px 0 30px;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .hero-cta {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.7s 0.45s ease both;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-block; text-decoration: none;
+      padding: clamp(11px, 2vw, 14px) clamp(22px, 4vw, 34px);
+      border-radius: 50px; font-family: var(--font-body);
+      font-weight: 800; font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      cursor: pointer; border: none; white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--orange); color: #fff;
+      box-shadow: 0 6px 24px rgba(244,124,32,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(244,124,32,0.5); }
+    .btn-outline {
+      background: transparent; color: var(--maroon);
+      border: 2px solid var(--maroon);
+    }
+    .btn-outline:hover { background: var(--maroon); color: #fff; transform: translateY(-3px); }
+
+    /* ── SECTIONS ── */
+    section { padding: clamp(56px, 10vw, 90px) 5vw; }
+    .section-label {
+      text-align: center; font-size: clamp(0.62rem, 1.5vw, 0.75rem);
+      font-weight: 800; letter-spacing: 4px; color: var(--orange);
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .section-title {
+      text-align: center; font-family: var(--font-display);
+      font-size: clamp(1.6rem, 5vw, 3rem);
+      color: var(--maroon); margin-bottom: clamp(28px, 6vw, 50px);
+      line-height: 1.2;
+    }
+
+    /* ── PRODUCTS ── */
+    #products { background: var(--cream); }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(170px, 45%), 1fr));
+      gap: clamp(12px, 2.5vw, 24px);
+      max-width: 1000px; margin: 0 auto;
+    }
+    .product-card {
+      background: #fff; border-radius: 20px;
+      padding: clamp(18px, 3.5vw, 32px) clamp(12px, 2.5vw, 20px) clamp(14px, 3vw, 24px);
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(122,27,42,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .product-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--orange), var(--gold));
+    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(244,124,32,0.2); }
+    .product-icon { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-bottom: 10px; display: block; }
+    .product-name {
+      font-family: var(--font-display);
+      font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+      color: var(--maroon); font-weight: 700;
+    }
+    .product-desc { font-size: clamp(0.72rem, 1.6vw, 0.82rem); color: #9A6040; margin-top: 6px; line-height: 1.5; }
+
+    /* ── WHY US ── */
+    #why { background: var(--warm-white); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(190px, 45%), 1fr));
+      gap: clamp(14px, 3vw, 28px);
+      max-width: 900px; margin: 0 auto;
+    }
+    .why-card {
+      text-align: center; padding: clamp(22px, 4.5vw, 36px) clamp(14px, 3vw, 24px);
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fff5ec, #fff);
+      border: 1.5px solid rgba(244,124,32,0.2);
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .why-card:hover { border-color: var(--orange); transform: translateY(-5px); }
+    .why-icon { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 12px; }
+    .why-title { font-weight: 800; font-size: clamp(0.88rem, 2vw, 1rem); color: var(--maroon); margin-bottom: 8px; }
+    .why-text { font-size: clamp(0.76rem, 1.6vw, 0.85rem); color: #7A5030; line-height: 1.6; }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--cream); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(130px, 30%), 1fr));
+      gap: clamp(8px, 2vw, 16px);
+      max-width: 1000px; margin: 0 auto;
+    }
+    .gallery-item {
+      border-radius: 16px; aspect-ratio: 1/1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .gallery-item:nth-child(1) { background: linear-gradient(135deg, #ffd8a8, #ffb865); }
+    .gallery-item:nth-child(2) { background: linear-gradient(135deg, #ffc09f, #e8804a); }
+    .gallery-item:nth-child(3) { background: linear-gradient(135deg, #ffe4b5, #f9c06a); }
+    .gallery-item:nth-child(4) { background: linear-gradient(135deg, #ffa07a, #d45f30); }
+    .gallery-item:nth-child(5) { background: linear-gradient(135deg, #ffcd94, #f5a623); }
+    .gallery-item:nth-child(6) { background: linear-gradient(135deg, #f7b7a3, #e07050); }
+    .gallery-item:hover { transform: scale(1.06); box-shadow: 0 12px 32px rgba(244,124,32,0.25); }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--maroon); color: #fff; text-align: center; }
+    #contact .section-label { color: var(--gold); }
+    #contact .section-title { color: #fff; }
+    .contact-phone {
+      display: inline-flex; align-items: center; gap: clamp(8px, 2vw, 14px);
+      background: var(--orange); color: #fff;
+      font-size: clamp(1.05rem, 4.5vw, 2rem); font-weight: 900;
+      padding: clamp(14px, 3vw, 20px) clamp(22px, 6vw, 48px);
+      border-radius: 60px; text-decoration: none;
+      box-shadow: 0 10px 40px rgba(244,124,32,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: clamp(1px, 0.5vw, 2px);
+      white-space: nowrap; max-width: 90vw;
+    }
+    .contact-phone:hover { transform: scale(1.04); box-shadow: 0 16px 50px rgba(244,124,32,0.7); }
+    .contact-tagline {
+      font-size: clamp(0.88rem, 2.5vw, 1.05rem);
+      color: rgba(255,255,255,0.65); margin: 24px 0; font-style: italic;
+    }
+    .contact-note {
+      margin-top: 24px; font-size: clamp(0.76rem, 1.8vw, 0.85rem);
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1a0a04; color: rgba(255,255,255,0.4);
+      text-align: center; padding: 20px 5vw;
+      font-size: clamp(0.7rem, 1.8vw, 0.82rem); line-height: 1.7;
+    }
+    footer span { color: var(--orange); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+
+    /* ≤ 768 px : tablet / large phone landscape */
+    @media (max-width: 768px) {
+      .nav-links  { display: none; }
+      .hamburger  { display: flex; }
+    }
+
+    /* ≤ 500 px : phones */
+    @media (max-width: 500px) {
+      .hero-cta  { flex-direction: column; align-items: center; }
+      .btn       { width: 100%; max-width: 300px; text-align: center; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid  { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-phone { font-size: 1rem; padding: 13px 20px; }
+    }
+
+    /* ≤ 340 px : very narrow */
+    @media (max-width: 340px) {
+      .products-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ≥ 1280 px : large desktop */
+    @media (min-width: 1280px) {
+      .products-grid { grid-template-columns: repeat(4, 1fr); }
+      .why-grid      { grid-template-columns: repeat(4, 1fr); }
+      .gallery-grid  { grid-template-columns: repeat(6, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">MST <span>Moren</span></div>
+    <ul class="nav-links" aria-label="Main navigation">
+      <li><a href="#products">Menu</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE DRAWER -->
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="#products" class="mobile-link">🍽️ Menu</a>
+    <a href="#why"      class="mobile-link">💛 Why Us</a>
+    <a href="#gallery"  class="mobile-link">📸 Gallery</a>
+    <a href="#contact"  class="mobile-link">📞 Contact</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">MST — Est. in Your Neighbourhood</div>
+      <h1>Moren <span>Sweet Treat</span></h1>
+      <p class="hero-tagline">Sweetening Moments, One Treat At A Time</p>
+      <div class="hero-cta">
+        <a href="#products" class="btn btn-primary">Explore Our Menu</a>
+        <a href="#contact"  class="btn btn-outline">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products">
+    <p class="section-label reveal">What We Offer</p>
+    <h2 class="section-title reveal">Our Delicious Menu</h2>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <span class="product-icon">🎂</span>
+        <div class="product-name">Cake</div>
+        <p class="product-desc">Freshly baked cakes for every occasion — birthdays, celebrations & more.</p>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🥐</span>
+        <div class="product-name">Pastries</div>
+        <p class="product-desc">Flaky, golden pastries filled with savoury goodness that melt in your mouth.</p>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🍟</span>
+        <div class="product-name">Plantain Chips</div>
+        <p class="product-desc">Crispy, golden plantain chips — a perfect crunchy snack anytime.</p>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🍪</span>
+        <div class="product-name">Chin Chin</div>
+        <p class="product-desc">Traditional crunchy chin chin made fresh with love and the finest ingredients.</p>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🫙</span>
+        <div class="product-name">Local Snacks</div>
+        <p class="product-desc">Authentic local favourites that bring the taste of home to every bite.</p>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🥛</span>
+        <div class="product-name">Yoghurt</div>
+        <p class="product-desc">Smooth, creamy yoghurt — refreshing and packed with flavour.</p>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">🌺</span>
+        <div class="product-name">Zobo</div>
+        <p class="product-desc">Chilled hibiscus zobo drink — naturally sweet, vibrant and refreshing.</p>
+      </div>
+      <div class="product-card reveal">
+        <span class="product-icon">✨</span>
+        <div class="product-name">And Lots More!</div>
+        <p class="product-desc">New treats added regularly. Call us to find out what's fresh today.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why">
+    <p class="section-label reveal">Our Promise</p>
+    <h2 class="section-title reveal">Why Choose Moren?</h2>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">🌿</div>
+        <div class="why-title">Fresh Ingredients</div>
+        <p class="why-text">Every treat is made from the freshest ingredients, sourced daily for quality you can taste.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">❤️</div>
+        <div class="why-title">Made with Love</div>
+        <p class="why-text">We pour heart and soul into every product — from our cakes to our local snacks.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🎁</div>
+        <div class="why-title">Perfect for Gifting</div>
+        <p class="why-text">Looking for a thoughtful gift? Our treats make every moment special and memorable.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🚀</div>
+        <div class="why-title">Quick & Reliable</div>
+        <p class="why-text">We take your orders seriously — prompt service you can depend on every time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <p class="section-label reveal">A Peek Inside</p>
+    <h2 class="section-title reveal">Our Treats Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">🎂</div>
+      <div class="gallery-item reveal">🥐</div>
+      <div class="gallery-item reveal">🍟</div>
+      <div class="gallery-item reveal">🍪</div>
+      <div class="gallery-item reveal">🌺</div>
+      <div class="gallery-item reveal">🥛</div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label reveal">Get In Touch</p>
+    <h2 class="section-title reveal">Place Your Order Today</h2>
+    <p class="contact-tagline reveal">Call us now to place your order or make an enquiry!</p>
+    <a href="tel:09069634630" class="contact-phone reveal">
+      <span>📞</span>&nbsp;09069634630
+    </a>
+    <p class="contact-note reveal">Available daily — we'd love to sweeten your moment!</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 <span>Moren Sweet Treat</span> · Sweetening Moments, One Treat At A Time</p>
+  </footer>
+
+  <script>
+    /* ── Hamburger / mobile drawer ── */
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    hamburger.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', String(open));
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link =>
+      link.addEventListener('click', closeMenu));
+
+    /* Close drawer if user clicks outside */
+    document.addEventListener('click', e => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMenu();
+    });
+
+    /* ── Scroll reveal ── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer  = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 55);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
