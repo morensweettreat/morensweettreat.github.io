@@ -344,6 +344,64 @@
       font-size: 0.8rem; cursor: pointer; text-decoration: underline;
     }
 
+    /* ── VARIETY SELECTOR ── */
+    .variety-picker {
+      display: none; flex-direction: column; gap: 6px;
+      margin-top: 10px; text-align: left;
+    }
+    .product-card.selected .variety-picker { display: flex; }
+    .variety-label {
+      font-size: 0.72rem; font-weight: 800; color: var(--maroon);
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .variety-chips {
+      display: flex; flex-wrap: wrap; gap: 5px;
+    }
+    .variety-chip {
+      background: #fff; border: 1.5px solid rgba(244,124,32,0.35);
+      border-radius: 20px; padding: 4px 10px;
+      font-size: 0.72rem; font-weight: 700; color: var(--maroon);
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+      user-select: none;
+    }
+    .variety-chip:hover { border-color: var(--orange); color: var(--orange); }
+    .variety-chip.active {
+      background: var(--orange); color: #fff;
+      border-color: var(--orange);
+    }
+    .variety-custom {
+      width: 100%; border: 1.5px solid rgba(244,124,32,0.3);
+      border-radius: 10px; padding: 6px 10px;
+      font-family: var(--font-body); font-size: 0.78rem; color: var(--text);
+      background: var(--warm-white); outline: none; margin-top: 4px;
+      transition: border-color 0.2s;
+    }
+    .variety-custom:focus { border-color: var(--orange); }
+    .variety-custom::placeholder { color: #bbb; }
+
+    /* ── QUANTITY STEPPER ── */
+    .qty-stepper {
+      display: none; align-items: center; justify-content: center;
+      gap: 0; margin-top: 12px;
+      background: var(--cream); border-radius: 30px;
+      overflow: hidden; border: 1.5px solid rgba(244,124,32,0.3);
+    }
+    .product-card.selected .qty-stepper { display: flex; }
+    .qty-btn {
+      background: none; border: none; cursor: pointer;
+      width: 34px; height: 34px; font-size: 1.2rem; font-weight: 900;
+      color: var(--maroon); display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s; flex-shrink: 0;
+    }
+    .qty-btn:hover { background: rgba(244,124,32,0.2); }
+    .qty-num {
+      min-width: 30px; text-align: center;
+      font-weight: 900; font-size: 0.95rem; color: var(--maroon);
+      border-left: 1px solid rgba(244,124,32,0.25);
+      border-right: 1px solid rgba(244,124,32,0.25);
+      padding: 0 4px; line-height: 34px;
+    }
+
     /* ── CONTACT ── */
     #contact { background: var(--maroon); color: #fff; text-align: center; }
     #contact .section-label { color: var(--gold); }
@@ -467,46 +525,237 @@
     <h2 class="section-title reveal">Our Delicious Menu</h2>
     <p class="select-hint reveal">👆 Tap any item to add it to your order</p>
     <div class="products-grid">
+
+      <!-- CAKE -->
       <div class="product-card reveal" data-item="Cake" onclick="toggleItem(this)">
         <span class="product-icon">🎂</span>
         <div class="product-name">Cake</div>
         <p class="product-desc">Freshly baked cakes for every occasion — birthdays, celebrations & more.</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">🎨 Type / Flavour</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Birthday Cake</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Chocolate</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Vanilla</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Red Velvet</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Carrot Cake</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Fruit Cake</span>
+          </div>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="Other (e.g. 'Write Happy Bday John')" oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
+      <!-- PASTRIES -->
       <div class="product-card reveal" data-item="Pastries" onclick="toggleItem(this)">
         <span class="product-icon">🥐</span>
         <div class="product-name">Pastries</div>
         <p class="product-desc">Flaky, golden pastries filled with savoury goodness that melt in your mouth.</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">🥟 Type / Filling</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Meat Pie</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Fish Pie</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Egg Roll</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Sausage Roll</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Puff Puff</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Doughnut</span>
+          </div>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="Other pastry type…" oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
+      <!-- PLANTAIN CHIPS -->
       <div class="product-card reveal" data-item="Plantain Chips" onclick="toggleItem(this)">
         <span class="product-icon">🍟</span>
         <div class="product-name">Plantain Chips</div>
         <p class="product-desc">Crispy, golden plantain chips — a perfect crunchy snack anytime.</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">🌶️ Flavour / Style</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Plain / Salted</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Spicy</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Sweet</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Honey Glazed</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Thin &amp; Crispy</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Thick Cut</span>
+          </div>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="Other preference…" oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
+      <!-- CHIN CHIN -->
       <div class="product-card reveal" data-item="Chin Chin" onclick="toggleItem(this)">
         <span class="product-icon">🍪</span>
         <div class="product-name">Chin Chin</div>
         <p class="product-desc">Traditional crunchy chin chin made fresh with love and the finest ingredients.</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">✨ Variety</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Classic / Plain</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Coconut</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Peanut</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Chocolate</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Spicy</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Baked</span>
+          </div>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="Other variety…" oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
+      <!-- LOCAL SNACKS -->
       <div class="product-card reveal" data-item="Local Snacks" onclick="toggleItem(this)">
         <span class="product-icon">🫙</span>
         <div class="product-name">Local Snacks</div>
         <p class="product-desc">Authentic local favourites that bring the taste of home to every bite.</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">🍽️ Snack Type</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Roasted Groundnut</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Kuli Kuli</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Donkwa</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Kokoro</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Gurudi</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Aadun</span>
+          </div>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="Other local snack…" oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
+      <!-- YOGHURT -->
       <div class="product-card reveal" data-item="Yoghurt" onclick="toggleItem(this)">
         <span class="product-icon">🥛</span>
         <div class="product-name">Yoghurt</div>
         <p class="product-desc">Smooth, creamy yoghurt — refreshing and packed with flavour.</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">🍓 Flavour</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Plain / Natural</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Strawberry</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Vanilla</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Mango</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Mixed Berry</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Pineapple</span>
+          </div>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="Other flavour…" oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
+      <!-- ZOBO -->
       <div class="product-card reveal" data-item="Zobo" onclick="toggleItem(this)">
         <span class="product-icon">🌺</span>
         <div class="product-name">Zobo</div>
         <p class="product-desc">Chilled hibiscus zobo drink — naturally sweet, vibrant and refreshing.</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">🥤 Variety</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Classic Zobo</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Ginger &amp; Cloves</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Pineapple Zobo</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Zobo + Cucumber</span>
+          </div>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="Other preference…" oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
+      <!-- OTHER / ENQUIRY -->
       <div class="product-card reveal" data-item="Other / Enquiry" onclick="toggleItem(this)">
         <span class="product-icon">✨</span>
         <div class="product-name">More Items</div>
-        <p class="product-desc">New treats added regularly. Call us to find out what's fresh today.</p>
+        <p class="product-desc">New treats added regularly. Describe what you want below!</p>
+        <div class="variety-picker" onclick="event.stopPropagation()">
+          <span class="variety-label">📝 Describe your request</span>
+          <span class="variety-label" style="margin-top:8px;">📐 Size</span>
+          <div class="variety-chips">
+            <span class="variety-chip" onclick="toggleChip(this)">Medium</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Large</span>
+            <span class="variety-chip" onclick="toggleChip(this)">Extra Large</span>
+          </div>
+          <input class="variety-custom" type="text" placeholder="e.g. Small chops, shawarma, etc." oninput="updateSelectedList()"/>
+        </div>
+        <div class="qty-stepper" onclick="event.stopPropagation()">
+          <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
       </div>
+
     </div>
   </section>
 
@@ -607,39 +856,80 @@
   </footer>
 
   <script>
-    /* ── Selected items state ── */
-    const selectedItems = new Set();
+    /* ── Selected items state: Map of item → { qty, varieties } ── */
+    const selectedItems = new Map();
 
     function toggleItem(card) {
       const item = card.dataset.item;
       if (selectedItems.has(item)) {
         selectedItems.delete(item);
         card.classList.remove('selected');
+        card.querySelector('.qty-num').textContent = '1';
+        // clear chips & custom input
+        card.querySelectorAll('.variety-chip.active').forEach(c => c.classList.remove('active'));
+        const custom = card.querySelector('.variety-custom');
+        if (custom) custom.value = '';
       } else {
-        selectedItems.add(item);
+        selectedItems.set(item, { qty: 1 });
         card.classList.add('selected');
       }
       updateSelectedList();
     }
 
+    function toggleChip(chip) {
+      chip.classList.toggle('active');
+      updateSelectedList();
+    }
+
+    function changeQty(btn, delta) {
+      const card  = btn.closest('.product-card');
+      const item  = card.dataset.item;
+      const numEl = card.querySelector('.qty-num');
+      let qty = parseInt(numEl.textContent) + delta;
+      if (qty < 1) qty = 1;
+      numEl.textContent = qty;
+      if (selectedItems.has(item)) selectedItems.get(item).qty = qty;
+      updateSelectedList();
+    }
+
+    function getCardVariety(card) {
+      const chips  = [...card.querySelectorAll('.variety-chip.active')].map(c => c.textContent.trim());
+      const custom = (card.querySelector('.variety-custom')?.value || '').trim();
+      return [...chips, ...(custom ? [custom] : [])].join(', ');
+    }
+
     function updateSelectedList() {
-      const listEl  = document.getElementById('selectedList');
+      const listEl   = document.getElementById('selectedList');
       const clearBtn = document.getElementById('clearBtn');
       if (selectedItems.size === 0) {
         listEl.textContent = 'No items selected yet…';
         listEl.classList.add('empty');
         clearBtn.style.display = 'none';
-      } else {
-        listEl.innerHTML = [...selectedItems].map(i => `✅ ${i}`).join('<br>');
-        listEl.classList.remove('empty');
-        clearBtn.style.display = 'inline-block';
+        return;
       }
+      let html = '';
+      selectedItems.forEach((data, item) => {
+        const card    = document.querySelector(`.product-card[data-item="${item}"]`);
+        const qty     = card ? parseInt(card.querySelector('.qty-num').textContent) : 1;
+        const variety = card ? getCardVariety(card) : '';
+        html += `✅ <strong>${item}</strong> × ${qty}`;
+        if (variety) html += ` <span style="color:#9A6040;font-weight:600">(${variety})</span>`;
+        html += '<br>';
+      });
+      listEl.innerHTML = html;
+      listEl.classList.remove('empty');
+      clearBtn.style.display = 'inline-block';
     }
 
     function clearAll() {
       selectedItems.clear();
-      document.querySelectorAll('.product-card.selected')
-        .forEach(c => c.classList.remove('selected'));
+      document.querySelectorAll('.product-card.selected').forEach(c => {
+        c.classList.remove('selected');
+        c.querySelector('.qty-num').textContent = '1';
+        c.querySelectorAll('.variety-chip.active').forEach(ch => ch.classList.remove('active'));
+        const custom = c.querySelector('.variety-custom');
+        if (custom) custom.value = '';
+      });
       updateSelectedList();
     }
 
@@ -649,8 +939,7 @@
       const phone = document.getElementById('customerPhone').value.trim();
       const extra = document.getElementById('extraNote').value.trim();
 
-      const itemsList = [...selectedItems];
-      if (itemsList.length === 0 && !extra) {
+      if (selectedItems.size === 0 && !extra) {
         alert('Please select at least one item or describe your order before sending!');
         return;
       }
@@ -658,16 +947,22 @@
       let msg = '🌟 *New Order — Moren Sweet Treat* 🌟\n\n';
       if (name)  msg += `👤 *Name:* ${name}\n`;
       if (phone) msg += `📱 *Phone:* ${phone}\n`;
-      if (itemsList.length > 0) {
+      if (selectedItems.size > 0) {
         msg += `\n🛒 *Items Ordered:*\n`;
-        itemsList.forEach(item => { msg += `  • ${item}\n`; });
+        selectedItems.forEach((data, item) => {
+          const card    = document.querySelector(`.product-card[data-item="${item}"]`);
+          const qty     = card ? parseInt(card.querySelector('.qty-num').textContent) : 1;
+          const variety = card ? getCardVariety(card) : '';
+          msg += `  • ${item} × ${qty}`;
+          if (variety) msg += ` (${variety})`;
+          msg += '\n';
+        });
       }
       if (extra) msg += `\n📝 *Additional Details:*\n${extra}\n`;
       msg += '\n_Sent via https://30xtech.github.io/Moren-Sweet-Treat/_';
 
       const waNumber = '2349069634630';
-      const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
+      window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     /* ── Hamburger ── */
